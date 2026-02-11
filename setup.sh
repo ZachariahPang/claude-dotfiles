@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
-CLAUDE_DIR="$HOME/.claude"
+CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
 echo "==> Claude Code dotfiles setup"
 echo "    Repo: $REPO_DIR"
