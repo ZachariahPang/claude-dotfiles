@@ -1,0 +1,22 @@
+{
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "obsidian@obsidian-skills": true
+  },
+  "mcpServers": {
+    "drawio": {
+      "command": "npx",
+      "args": [
+        "--yes",
+        "@next-ai-drawio/mcp-server@latest"
+      ]
+    }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); dir=$(echo \"$cwd\" | sed \"s|^$HOME|~|\"); model=$(echo \"$input\" | jq -r '.model.display_name'); ctx_size_raw=$(echo \"$input\" | jq -r '.context_window.context_window_size // 0'); ctx_size_k=$((ctx_size_raw / 1000)); remaining_raw=$(echo \"$input\" | jq -r '.context_window.remaining_percentage // empty'); context_info=\"\"; if [ -n \"$remaining_raw\" ]; then rem_int=${remaining_raw%.*}; used=$((100 - rem_int)); filled=$((used * 10 / 100)); empty=$((10 - filled)); bar_filled=$(printf '%*s' \"$filled\" '' | tr ' ' '█'); bar_empty=$(printf '%*s' \"$empty\" '' | tr ' ' '░'); context_info=$(printf \" \\033[1;32m%s\\033[2;32m%s\\033[0m \\033[2;32m%s%%\\033[0m\" \"$bar_filled\" \"$bar_empty\" \"$used\"); fi; in_tok=$(echo \"$input\" | jq -r '.context_window.total_input_tokens // 0'); out_tok=$(echo \"$input\" | jq -r '.context_window.total_output_tokens // 0'); in_k=$((in_tok / 1000)); out_k=$((out_tok / 1000)); token_info=$(printf \" \\033[2;33m%sk/%sk\\033[0m\" \"$in_k\" \"$out_k\"); cost_raw=$(echo \"$input\" | jq -r '.cost.total_cost_usd // 0'); cost_fmt=$(printf '%.1f' \"$cost_raw\"); cost_info=$(printf \" \\033[2;33m$%s\\033[0m\" \"$cost_fmt\"); git_info=\"\"; if git -C \"$cwd\" rev-parse --git-dir >/dev/null 2>&1; then branch=$(git -C \"$cwd\" --no-optional-locks branch --show-current 2>/dev/null || git -C \"$cwd\" --no-optional-locks rev-parse --short HEAD 2>/dev/null); dirty=\"\"; if [ -n \"$(git -C \"$cwd\" --no-optional-locks status --porcelain 2>/dev/null | head -1)\" ]; then dirty='*'; fi; ahead=0; behind=0; ab=$(git -C \"$cwd\" --no-optional-locks rev-list --left-right --count HEAD...@{upstream} 2>/dev/null); if [ -n \"$ab\" ]; then ahead=$(echo \"$ab\" | cut -f1); behind=$(echo \"$ab\" | cut -f2); fi; ab_info=\"\"; if [ \"$ahead\" -gt 0 ] 2>/dev/null && [ \"$behind\" -gt 0 ] 2>/dev/null; then ab_info=$(printf ' ↑%s↓%s' \"$ahead\" \"$behind\"); elif [ \"$ahead\" -gt 0 ] 2>/dev/null; then ab_info=$(printf ' ↑%s' \"$ahead\"); elif [ \"$behind\" -gt 0 ] 2>/dev/null; then ab_info=$(printf ' ↓%s' \"$behind\"); fi; git_info=$(printf \" \\033[2;36mon %s%s%s\\033[0m\" \"$branch\" \"$dirty\" \"$ab_info\"); fi; printf \"\\033[2;32m%s (%sk)\\033[0m%s%s%s %s%s\" \"$model\" \"$ctx_size_k\" \"$context_info\" \"$token_info\" \"$cost_info\" \"$dir\" \"$git_info\""
+  }
+}
