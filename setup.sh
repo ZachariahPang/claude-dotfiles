@@ -22,20 +22,29 @@ else
       exit 1
     fi
   else
+    SUDO=""
+    if [ "$(id -u)" -ne 0 ]; then
+      SUDO="sudo"
+    fi
     if command -v apt-get &>/dev/null; then
-      sudo apt-get update && sudo apt-get install -y jq
+      $SUDO apt-get update && $SUDO apt-get install -y jq
     elif command -v dnf &>/dev/null; then
-      sudo dnf install -y jq
+      $SUDO dnf install -y jq
     elif command -v pacman &>/dev/null; then
-      sudo pacman -S --noconfirm jq
+      $SUDO pacman -S --noconfirm jq
     elif command -v apk &>/dev/null; then
-      sudo apk add jq
+      $SUDO apk add jq
     else
       echo "ERROR: No supported package manager found. Install jq manually: https://jqlang.github.io/jq/download/"
       exit 1
     fi
   fi
-  echo "    jq installed: $(jq --version)"
+  if command -v jq &>/dev/null; then
+    echo "    jq installed: $(jq --version)"
+  else
+    echo "ERROR: jq installation failed"
+    exit 1
+  fi
 fi
 
 # --- Install Claude Code ---
