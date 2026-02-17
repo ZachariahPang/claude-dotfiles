@@ -47,6 +47,44 @@ else
   fi
 fi
 
+# --- Install tmux ---
+if command -v tmux &>/dev/null; then
+  echo "==> tmux already installed: $(tmux -V)"
+else
+  echo "==> Installing tmux..."
+  if [[ "$(uname)" == "Darwin" ]]; then
+    if command -v brew &>/dev/null; then
+      brew install tmux
+    else
+      echo "ERROR: Homebrew not found. Install tmux manually."
+      exit 1
+    fi
+  else
+    SUDO=""
+    if [ "$(id -u)" -ne 0 ]; then
+      SUDO="sudo"
+    fi
+    if command -v apt-get &>/dev/null; then
+      $SUDO apt-get update && $SUDO apt-get install -y tmux
+    elif command -v dnf &>/dev/null; then
+      $SUDO dnf install -y tmux
+    elif command -v pacman &>/dev/null; then
+      $SUDO pacman -S --noconfirm tmux
+    elif command -v apk &>/dev/null; then
+      $SUDO apk add tmux
+    else
+      echo "ERROR: No supported package manager found. Install tmux manually."
+      exit 1
+    fi
+  fi
+  if command -v tmux &>/dev/null; then
+    echo "    tmux installed: $(tmux -V)"
+  else
+    echo "ERROR: tmux installation failed"
+    exit 1
+  fi
+fi
+
 # --- Install Claude Code ---
 if command -v claude &>/dev/null; then
   echo "==> Claude Code already installed: $(claude --version 2>/dev/null || echo 'unknown version')"
@@ -89,6 +127,17 @@ elif [ -e "$TARGET" ]; then
 else
   ln -s "$SOURCE" "$TARGET"
   echo "==> Symlinked skills/"
+fi
+
+# --- Copy tmux.conf (skip if already exists) ---
+TARGET="$HOME/.tmux.conf"
+SOURCE="$REPO_DIR/tmux.conf"
+
+if [ -e "$TARGET" ]; then
+  echo "==> ~/.tmux.conf already exists, not updating"
+else
+  cp "$SOURCE" "$TARGET"
+  echo "==> Copied tmux.conf to ~/.tmux.conf"
 fi
 
 echo
