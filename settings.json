@@ -84,6 +84,7 @@
     "claude-md-management@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true
   },
+  "effortLevel": "medium",
   "mcpServers": {
     "drawio": {
       "command": "npx",
@@ -91,6 +92,14 @@
         "--yes",
         "@next-ai-drawio/mcp-server@latest"
       ]
+    }
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
     }
   }
 }
