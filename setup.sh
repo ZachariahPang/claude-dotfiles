@@ -113,6 +113,22 @@ else
   echo "==> Symlinked settings.json"
 fi
 
+# --- Symlink CLAUDE.md ---
+TARGET="$CLAUDE_DIR/CLAUDE.md"
+SOURCE="$REPO_DIR/CLAUDE.md"
+
+if [ -L "$TARGET" ]; then
+  echo "==> CLAUDE.md already symlinked"
+elif [ -e "$TARGET" ]; then
+  echo "==> Backing up existing CLAUDE.md -> CLAUDE.md.backup"
+  mv "$TARGET" "$TARGET.backup"
+  ln -s "$SOURCE" "$TARGET"
+  echo "    Symlinked CLAUDE.md"
+else
+  ln -s "$SOURCE" "$TARGET"
+  echo "==> Symlinked CLAUDE.md"
+fi
+
 # --- Symlink skills/ ---
 TARGET="$CLAUDE_DIR/skills"
 SOURCE="$REPO_DIR/skills"
