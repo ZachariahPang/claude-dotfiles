@@ -6,7 +6,8 @@ Portable Claude Code configuration — settings, permissions, skills, and status
 
 ### Claude Code dotfiles (**symlinked** — auto-update with `git pull`)
 
-- **settings.json** — Pre-approved read-only permissions, enabled plugins, MCP servers, and a status line showing model, context usage, token counts, cost, and git info
+- **settings.json** — Pre-approved read-only permissions, enabled plugins, MCP servers, and inline status line showing model, context usage bar, token counts (↑in/↓out), cost, git branch/ahead-behind, and changed file count
+- **CLAUDE.md** — Global code standards (fail-fast, tensor discipline, data loading, communication)
 - **skills/** — Custom skills (e.g. Draw.io diagram generation)
 
 These are **symlinked** into `~/.claude`, so pulling new changes updates them immediately.
@@ -31,7 +32,7 @@ The setup script will:
 2. Install `tmux` if missing
 3. Install Claude Code if missing
 4. Create `~/.claude` if needed
-5. **Symlink** `settings.json` and `skills/` into `~/.claude` (backs up existing files first)
+5. **Symlink** `settings.json`, `CLAUDE.md`, and `skills/` into `~/.claude` (backs up existing files first)
 6. **Copy** `tmux.conf` to `~/.tmux.conf` (skips if file already exists)
 
 ## Custom config directory
